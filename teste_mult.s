@@ -26,6 +26,20 @@ main:
 	movl	%ecx, %esi
 	movl	%eax, %edi
 	call	multiplicar_coeficientes
+	movl	-8(%rbp), %edx
+	addl	%edx, %eax
+	movslq	%eax, %rdx
+	imulq	$-1652704447, %rdx, %rdx
+	shrq	$32, %rdx
+	addl	%eax, %edx
+	sarl	$11, %edx
+	movl	%eax, %ecx
+	sarl	$31, %ecx
+	subl	%ecx, %edx
+	movl	%edx, -8(%rbp)
+	movl	-8(%rbp), %edx
+	imull	$3329, %edx, %edx
+	subl	%edx, %eax
 	movl	%eax, -8(%rbp)
 	addl	$1, -4(%rbp)
 .L2:
@@ -54,14 +68,26 @@ multiplicar_coeficientes:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register 6
-	movl	%edi, -4(%rbp)
-	movl	%esi, -8(%rbp)
-	movl	%edx, -12(%rbp)
-	movl	-4(%rbp), %eax
-	imull	-8(%rbp), %eax
-	cltd
-	idivl	-12(%rbp)
-	movl	%edx, %eax
+	movl	%edi, -20(%rbp)
+	movl	%esi, -24(%rbp)
+	movl	%edx, -28(%rbp)
+	movl	-20(%rbp), %eax
+	movslq	%eax, %rdx
+	movl	-24(%rbp), %eax
+	cltq
+	imulq	%rdx, %rax
+	movq	%rax, -8(%rbp)
+	jmp	.L6
+.L7:
+	movl	-28(%rbp), %eax
+	cltq
+	subq	%rax, -8(%rbp)
+.L6:
+	movl	-28(%rbp), %eax
+	cltq
+	cmpq	%rax, -8(%rbp)
+	jge	.L7
+	movq	-8(%rbp), %rax
 	popq	%rbp
 	.cfi_def_cfa 7, 8
 	ret

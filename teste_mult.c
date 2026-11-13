@@ -6,7 +6,7 @@ int main() {
 	int res = 0;
 	
 	for(int i=0; i < 256; i++){
-		res = multiplicar_coeficientes(i, i+1, 3329);
+		res = (res + multiplicar_coeficientes(i, i + 1, 3329)) % 3329;
 	}
 	
 	printf("Resultado acumulado: %d\n", res);
@@ -15,5 +15,11 @@ int main() {
 }
 
 int multiplicar_coeficientes(int a, int b, int q){
-	return (a * b) % q;
+    long long produto = (long long)a * b;
+    
+    while (produto >= q) {
+        produto -= q;
+    }
+    
+    return (int)produto;
 }
